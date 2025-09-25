@@ -10,39 +10,38 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.test1.dao.StudentService;
-import com.example.test1.dao.UserService;
+import com.example.test1.dao.TblService;
 import com.google.gson.Gson;
 
 @Controller
-public class StuController {
+public class TblController {
 
 	@Autowired
-	StudentService studentService;
+	TblService tblService;
 	
 	
-	@RequestMapping("/stu-list.do") 
+	@RequestMapping("/board-list.do") 
     public String login(Model model) throws Exception{
 
-        return "stu-list";
+        return "tbl";
         
     }
 	
-	@RequestMapping(value = "/stu-info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	
+	@RequestMapping(value = "/board-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String tblList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		System.out.println(map);
-		resultMap = studentService.studentInfo(map);
+		resultMap = tblService.tblList(map);
 		
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value = "/stu-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/board-list-delete.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String studentList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String tblListDelete(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = studentService.studentList(map);
+//		resultMap = tblService.tblDelete(map);
 		
 		return new Gson().toJson(resultMap);
 	}

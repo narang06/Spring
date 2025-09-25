@@ -25,28 +25,25 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-		<input placeholder="검색어" v-model="keyword">
-		<button @click="fnInfo()">검색</button>
+		<input placeholder="삭제할 글 번호" v-model="boardNo">
+		<button @click="fnDelete()">삭제</button>
         <div>
             <table>
                 <tr>
-                    <th>학번</th>
-                    <th>이름</th>
-                    <th>학과</th>
-                    <th>학년</th>
-                    <th>성별</th>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>조회수</th>
                 </tr>
                 <tr v-for="item in list">
-                    <td>{{item.stuNo}}</td>
-                    <td>{{item.stuName}}</td>
-                    <td>{{item.stuDept}}</td>
-                    <td>{{item.stuGrade}}</td>
-                    <td>{{item.stuGender}}</td>
+                    <td>{{item.boardNo}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.userId}}</td>
+                    <td>{{item.cnt}}</td>
                 </tr>
             </table>
         </div>
     </div>
-    
 </body>
 </html>
 
@@ -55,37 +52,40 @@
         data() {
             return {
                 // 변수 - (key : value)
-				keyword : "",
-                list: {}
+                boardNo : "",
+                list : {}
             };
         },
         methods: {
+            // 함수(메소드) - (key : function())
             fnList: function () {
                 let self = this;
                 let param = {};
                 $.ajax({
-                    url: "stu-list.dox",
+                    url: "board-list.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-						console.log(data);
                         self.list = data.list;
+
                     }
                 });
             },
-            fnInfo: function () {
+
+            fnDelete: function () {
                 let self = this;
                 let param = {
-					keyword : self.keyword
-				};
+                    boardNo : self.boardNo
+                };
                 $.ajax({
-                    url: "stu-info.dox",
+                    url: "board-list-delete.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-						console.log(data);
+                        alert("삭제 완료");
+                        self.fnList();
                     }
                 });
             }

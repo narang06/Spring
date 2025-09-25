@@ -1,6 +1,7 @@
 package com.example.test1.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,25 @@ public class StudentService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service => " + map);
-		Student student = studentMapper.StudentInfo(map);
+		Student student = studentMapper.studentInfo(map);
 		if(student != null) {
 			System.out.println(student.getStuNo());
 			System.out.println(student.getStuName());
 			System.out.println(student.getStuDept());
 		}
+		
+		resultMap.put("info",student);
+		resultMap.put("result","success");
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> studentList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List<Student> list = studentMapper.studentList(map);
+		
+		resultMap.put("list", list);
+		resultMap.put("result","success");
 		return resultMap;
 	}
 }
