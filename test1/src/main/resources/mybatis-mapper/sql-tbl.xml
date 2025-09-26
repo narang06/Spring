@@ -4,8 +4,25 @@
 
 <mapper namespace="com.example.test1.mapper.TblMapper">	
 	<select id="tblList" parameterType="hashmap" resultType="com.example.test1.model.Tbl">
-		SELECT *
-		FROM TBL_BOARD
+		SELECT 
+		B.*, TO_CHAR(CDATETIME, 'YYYY-MM-DD') AS CDATE
+		FROM TBL_BOARD B
+		WHERE 1=1
+		<if test="kind !='' and kind != null">
+			AND KIND = #{kind}
+		</if>
+		
+		<if test="sort == 1">
+			ORDER BY BOARDNO
+		</if>
+		
+		<if test="sort == 2">
+			ORDER BY TITLE
+		</if>
+		
+		<if test="sort == 3">
+			ORDER BY CNT DESC
+		</if>
 	</select>
 	
 	<delete id="tblDelete" parameterType="hashmap">
@@ -13,6 +30,14 @@
 		FROM TBL_BOARD
 		WHERE BOARDNO = #{boardNo}
 	</delete>
+	
+	<insert id="tblAdd" parameterType="hashmap">
+		INSERT INTO TBL_BOARD VALUES (B_SEQ.NEXTVAL, #{title}, #{content}, #{userId}, 0, 0, 3, SYSDATE, SYSDATE)
+	</insert>
+	
+	<select id="tblInfo" parameterType="hashmap" resultType="com.example.test1.model.Tbl">
+		SELECT * FROM TBL_BOARD WHERE BOARDNO = #{boardNo}
+	</select>
 </mapper>
 
 

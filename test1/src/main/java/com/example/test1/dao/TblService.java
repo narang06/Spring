@@ -24,11 +24,28 @@ public class TblService {
 		return resultMap;
 	}
 	
-	public HashMap<String, Object> tblDelete(Tbl boardNo) {
+	public HashMap<String, Object> tblDelete(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		HashMap<String, Object> param = new HashMap<>();
-		param.put("boardNo", boardNo);
+		int cnt = tblMapper.tblDelete(map);
 		
+		resultMap.put("result","success");
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> tblAdd(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int cnt = tblMapper.tblAdd(map);
+		
+		resultMap.put("result","success");
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> tblInfo(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Tbl info = tblMapper.tblInfo(map);
+		
+		resultMap.put("info", info);
+		resultMap.put("result","success");
 		return resultMap;
 	}
 }

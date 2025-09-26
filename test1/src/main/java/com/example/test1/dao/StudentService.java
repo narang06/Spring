@@ -41,4 +41,21 @@ public class StudentService {
 		resultMap.put("result","success");
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> removeStudentList(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int cnt = studentMapper.removeStudentList(map);
+		
+		resultMap.put("result","success");
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> getStudentInfo(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Student info = studentMapper.getStudentInfo(map);
+		
+		resultMap.put("info", info);
+		resultMap.put("result","success");
+		return resultMap;
+	}
 }

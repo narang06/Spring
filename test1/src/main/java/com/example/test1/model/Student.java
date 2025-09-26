@@ -6,7 +6,14 @@ public class Student {
 	private String stuDept;
 	private String stuGrade;
 	private String stuGender;
+	private String avgGrade;
 	
+	public String getEnrGrade() {
+		return avgGrade;
+	}
+	public void setEnrGrade(String avgGrade) {
+		this.avgGrade = avgGrade;
+	}
 	public String getStuNo() {
 		return stuNo;
 	}
