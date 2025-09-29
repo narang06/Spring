@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <th>작성자</th>
-                <td><input type="text" v-model="userId"></td>
+                <td><input type="text" v-model="sessionId" disabled></td>
             </tr>
             <tr>
                 <th>내용</th>
@@ -51,7 +51,9 @@
                 title : "",
                 userId : "",
                 content : "",
-                info : {}
+                info : {},
+                sessionId : "${sessionId}"
+                
                 
             };
         },
@@ -85,6 +87,7 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
+                        
                     }
                 });
             }
@@ -93,6 +96,10 @@
             // 처음 시작할 때 실행되는 부분
             let self = this;
             self.fnList();
+            if(self.sessionId == ""){
+                alert("로그인 후 이용해주세요.");
+                location.href ="/member/login.do";
+            }
         }
     });
 

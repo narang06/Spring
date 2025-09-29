@@ -56,7 +56,12 @@
                     <td>{{item.userId}}</td>
                     <td>{{item.cnt}}</td>
                     <td>{{item.cdate}}</td>
-                    <td><button @click="fnDelete(item.boardNo)">삭제</button></td>
+                    <td>
+                        <button @click="fnDelete(item.boardNo)" 
+                        v-if="item.userId == sessionId || status == 'A'">
+                            삭제
+                        </button>
+                    </td>
                 </tr>
             </table>
             <a href="board-add.do"><button>추가</button></a>
@@ -72,7 +77,10 @@
                 // 변수 - (key : value)
                 list : {},
                 kind : "",
-                sort : 1
+                sort : 1,
+                sessionId : "${sessionId}",
+                status : "${sessionStatus}"
+                
             };
         },
         methods: {
@@ -89,6 +97,7 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
+                        console.log(data);
                         self.list = data.list;
 
                     }
