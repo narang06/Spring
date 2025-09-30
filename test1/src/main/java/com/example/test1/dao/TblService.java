@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.TblMapper;
+import com.example.test1.model.Comment;
 import com.example.test1.model.Tbl;
 
 @Service
@@ -43,9 +44,12 @@ public class TblService {
 	public HashMap<String, Object> tblInfo(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		Tbl info = tblMapper.tblInfo(map);
+		List<Comment> commentList = tblMapper.tblCommentInfo(map);
 		
+		resultMap.put("commentList", commentList);
 		resultMap.put("info", info);
 		resultMap.put("result","success");
 		return resultMap;
 	}
+	
 }

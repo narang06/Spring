@@ -21,10 +21,22 @@
         tr:nth-child(even){
             background-color: azure;
         }
+        span{
+            color: red;
+        }
     </style>
 </head>
 <body>
     <div id="app">
+        <div>
+            <select v-model="search" @change="fnList">
+                <option value="1">:: 전체 ::</option>
+                <option value="2">:: 제목 ::</option>
+                <option value="3">:: 작성자 ::</option>
+            </select>
+            <input placeholder="검색" v-model="keyword">
+		    <button @click="fnList()">검색</button>
+        </div>
         <div>
             <select v-model="kind" @change="fnList">
                 <option value="">전체</option>
@@ -37,9 +49,7 @@
                 <option value="2">:: 제목순</option>
                 <option value="3">:: 조회순</option>
             </select>
-        </div>
-		<input placeholder="검색" v-model="boardNo">
-		<button @click="fnSearch()">검색</button>
+        </div>	
         <div>
             <table>
                 <tr>
@@ -52,7 +62,10 @@
                 </tr>
                 <tr v-for="item in list">
                     <td>{{item.boardNo}}</td>
-                    <td><a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a></td>
+                    <td v-if="">
+                        <a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}} </a>
+                        <span v-if="item.commentCount !=0"> [{{item.commentCount}}]</span>
+                    </td>
                     <td>{{item.userId}}</td>
                     <td>{{item.cnt}}</td>
                     <td>{{item.cdate}}</td>
@@ -78,8 +91,11 @@
                 list : {},
                 kind : "",
                 sort : 1,
+                search : 1,
+                keyword : "",
                 sessionId : "${sessionId}",
                 status : "${sessionStatus}"
+                
                 
             };
         },
@@ -89,7 +105,9 @@
                 let self = this;
                 let param = {
                     kind : self.kind,
-                    sort : self.sort
+                    sort : self.sort,
+                    keyword : self.keyword,
+                    search : self.search
                 };
                 $.ajax({
                     url: "board-list.dox",

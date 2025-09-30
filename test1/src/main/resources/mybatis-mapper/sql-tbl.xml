@@ -4,14 +4,38 @@
 
 <mapper namespace="com.example.test1.mapper.TblMapper">	
 	<select id="tblList" parameterType="hashmap" resultType="com.example.test1.model.Tbl">
-		SELECT 
-		B.*, TO_CHAR(CDATETIME, 'YYYY-MM-DD') AS CDATE
+		SELECT
+		    B.BOARDNO,
+		    B.TITLE,
+		    B.CONTENTS,
+		    B.USERID,
+		    CNT,
+		    B.FAVORITE,
+		    B.KIND,
+		    TO_CHAR(B.CDATETIME, 'YYYY-MM-DD') AS CDATE,
+		    COUNT(C.BOARDNO) AS COMMENTCOUNT
 		FROM TBL_BOARD B
+		LEFT JOIN TBL_COMMENT C ON B.BOARDNO = C.BOARDNO
 		WHERE 1=1
-		<if test="kind !='' and kind != null">
-			AND KIND = #{kind}
-		</if>
 		
+		<if test="search == 1">
+          AND TITLE LIKE '%' || #{keyword} || '%'
+          OR B.USERID LIKE '%' || #{keyword} || '%'
+     	</if>
+     	
+     	<if test="search == 2">
+     		AND TITLE LIKE '%' || #{keyword} || '%'
+     	</if>
+     	
+     	<if test="search == 3">
+     		AND B.USERID LIKE '%' || #{keyword} || '%'
+     	</if>
+		
+		<if test="kind !='' and kind != null">
+			AND B.KIND = #{kind}
+		</if>
+		GROUP BY B.BOARDNO, B.TITLE, B.CONTENTS, B.USERID, CNT, B.FAVORITE, 
+		    B.KIND, TO_CHAR(B.CDATETIME, 'YYYY-MM-DD')
 		<if test="sort == 1">
 			ORDER BY BOARDNO
 		</if>
@@ -22,6 +46,9 @@
 		
 		<if test="sort == 3">
 			ORDER BY CNT DESC
+		</if>
+		<if test="search == 2">
+			
 		</if>
 	</select>
 	
@@ -38,6 +65,14 @@
 	<select id="tblInfo" parameterType="hashmap" resultType="com.example.test1.model.Tbl">
 		SELECT * FROM TBL_BOARD WHERE BOARDNO = #{boardNo}
 	</select>
+	
+	<select id="tblCommentInfo" parameterType="hashmap" resultType="com.example.test1.model.Comment">
+		SELECT C.*, U.NICKNAME
+			FROM TBL_COMMENT C
+			JOIN TBL_USER U ON C.USERID = U.USERID
+			WHERE C.BOARDNO = #{boardNo}
+	</select>
+	
 </mapper>
 
 

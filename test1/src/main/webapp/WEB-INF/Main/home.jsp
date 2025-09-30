@@ -51,7 +51,7 @@
                 let self = this;
                 let param = {};
                 $.ajax({
-                    url: "member/logout.dox",
+                    url: "/member/logout.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,

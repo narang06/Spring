@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="/js/page-change.js"></script>
     <style>
-        table, tr, td, th{
+        #board table,  tr,  td,  th{
             border : 1px solid black;
             border-collapse: collapse;
             padding : 5px 10px;
@@ -25,22 +25,54 @@
 </head>
 <body>
     <div id="app">
-        <table>
-            <tr>
-                <th>제목</th>
-                <td>{{info.title}}</td>
-            </tr>
-            <tr>
-                <th>작성자</th>
-                <td>{{info.userId}}</td>
-            </tr>
-            <tr>
-                <th>내용</th>
-                <td>{{info.contents}}</td>
-            </tr>          
+        <div>
+            <p>-- 본문 --</p>
+            <table id="board">
+                <tr>
+                    <th>제목</th>
+                    <td>{{info.title}}</td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td>{{info.userId}}</td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td>{{info.contents}}</td>
+                </tr>  
+            </table>
+            <button @click="fnBack()">뒤로가기</button>
+            <button @click="fnUpdate(boardNo)">수정</button>  
+        </div>
+        <p>--댓글--</p>
+        <div>
+            <table id="comment">
+                <template v-for="comment in commentList">
+                    <tr>
+                        <th>댓글 작성자</th>
+                        <td>{{comment.nickName}}</td>
+                        <th v-if="comment.userId == sessionId || status == 'A'">
+                            <button @click="fnCommentDelete">삭제</button>
+                        </th>
+                    </tr>  
+                    <tr>
+                        <th>댓글 내용</th>
+                        <td>{{comment.contents}}</td>
+                        <th v-if="comment.userId == sessionId">
+                            <button @click="fnCommentUpdate">수정</button>
+                        </th>
+                    </tr>        
+                </template> 
+            </table>
+        </div>
+        <p>-- 입력창--</p>
+        <table id="commentInput">
+            <th>댓글 입력</th>
+            <td>
+                <textarea cols="40" rows="4"></textarea>
+            </td>
+            <td><button>저장</button></td>
         </table>
-        <button @click="fnBack()">뒤로가기</button>
-        <button @click="fnUpdate(boardNo)">수정</button>
     </div>
 </body>
 </html>
@@ -51,7 +83,10 @@
             return {
                 // 변수 - (key : value)
                 boardNo : "${boardNo}",
-                info : {}
+                info : {},
+                commentList : [],
+                // sessionId : "${sessionId}",
+                // status : "${sessionStatus}"
             };
         },
         methods: {
@@ -69,6 +104,7 @@
                     success: function (data) {
                         console.log(data);
                         self.info = data.info;
+                        self.commentList = data.commentList;
                     }
                 });
             },

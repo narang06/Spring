@@ -36,7 +36,15 @@
             <tr>
                 <th>시험 평균</th>
                 <td>{{info.avgGrade}}</td>
-            </tr>          
+            </tr>
+            <tr>
+                <th>댓글 작성자</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>댓글 내용</th>
+                <td></td>
+            </tr>            
         </table>
         <button @click="fnBack()">뒤로가기</button>
     </div>

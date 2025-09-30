@@ -15,5 +15,8 @@ public interface MemberMapper {
 	// 중복체크
 	Member idCheck(HashMap<String, Object> map);
 	
+	// 가입
+	int memberAdd(HashMap<String, Object> map);
+	
 	
 }
