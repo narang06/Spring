@@ -23,8 +23,23 @@ public interface TblMapper {
 	// 게시글 상세정보
 	Tbl tblInfo(HashMap<String, Object> map);
 	
+	// 게시글 조회수 
+	int tblCnt(HashMap<String, Object> map);
+	
+	// 게시글 전체 개수
+	int tblListCnt(HashMap<String, Object> map);
+	
 	// 댓글 목록
 	List<Comment> tblCommentInfo(HashMap<String, Object> map);
+	
+	// 댓글 추가
+	int commentAdd(HashMap<String, Object> map);
+	
+	// 댓글 삭제
+	int commentDelete(HashMap<String, Object> map);
+	
+	
+	
 	
 	
 }

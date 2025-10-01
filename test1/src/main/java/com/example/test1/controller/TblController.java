@@ -78,10 +78,27 @@ public class TblController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = tblService.tblInfo(map);
 		
+		
 		return new Gson().toJson(resultMap);
 	}
 	
+	@RequestMapping(value = "/comment/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String commentAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = tblService.commentAdd(map);
+		
+		return new Gson().toJson(resultMap);
+	}
 	
+	@RequestMapping(value = "/comment/delete.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String commentDelete(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = tblService.commentDelete(map);
+		
+		return new Gson().toJson(resultMap);
+	}
 	
 	
 }

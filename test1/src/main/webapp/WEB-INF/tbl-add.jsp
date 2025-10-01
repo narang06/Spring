@@ -63,7 +63,7 @@
                 let self = this;
                 let param = {
                     title : self.title,
-                    userId : self.userId,
+                    userId : self.sessionId,
                     content : self.content
                 };
                 $.ajax({

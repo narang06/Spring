@@ -12,15 +12,22 @@
 		    CNT,
 		    B.FAVORITE,
 		    B.KIND,
-		    TO_CHAR(B.CDATETIME, 'YYYY-MM-DD') AS CDATE,
+		    DECODE(
+                TO_CHAR(B.CDATETIME,'YYYY-MM-DD'),
+                TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+                TO_CHAR(B.CDATETIME, 'HH24:MI:SS'),
+                TO_CHAR(B.CDATETIME, 'YYYY-MM-DD')
+                ) AS CDATE,
 		    COUNT(C.BOARDNO) AS COMMENTCOUNT
 		FROM TBL_BOARD B
 		LEFT JOIN TBL_COMMENT C ON B.BOARDNO = C.BOARDNO
 		WHERE 1=1
 		
 		<if test="search == 1">
-          AND TITLE LIKE '%' || #{keyword} || '%'
-          OR B.USERID LIKE '%' || #{keyword} || '%'
+          AND (
+			TITLE LIKE '%' || #{keyword} || '%'
+          	OR B.USERID LIKE '%' || #{keyword} || '%'
+          )
      	</if>
      	
      	<if test="search == 2">
@@ -35,9 +42,14 @@
 			AND B.KIND = #{kind}
 		</if>
 		GROUP BY B.BOARDNO, B.TITLE, B.CONTENTS, B.USERID, CNT, B.FAVORITE, 
-		    B.KIND, TO_CHAR(B.CDATETIME, 'YYYY-MM-DD')
+		    B.KIND, DECODE(
+            TO_CHAR(B.CDATETIME,'YYYY-MM-DD'),
+            TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+            TO_CHAR(B.CDATETIME, 'HH24:MI:SS'),
+            TO_CHAR(B.CDATETIME, 'YYYY-MM-DD')
+         )
 		<if test="sort == 1">
-			ORDER BY BOARDNO
+			ORDER BY BOARDNO 
 		</if>
 		
 		<if test="sort == 2">
@@ -47,8 +59,40 @@
 		<if test="sort == 3">
 			ORDER BY CNT DESC
 		</if>
-		<if test="search == 2">
-			
+		
+		<if test="sort == 4">
+			ORDER BY CDATE
+		</if>
+		<if test="sort == 5">
+			ORDER BY COMMENTCOUNT DESC
+		</if>
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+
+	</select>
+	
+	<select id="tblListCnt" parameterType="hashmap" resultType="INT">
+		SELECT
+		   COUNT(*)
+		FROM TBL_BOARD B
+		WHERE 1=1
+		
+		<if test="search == 1">
+          AND (
+			TITLE LIKE '%' || #{keyword} || '%'
+          	OR B.USERID LIKE '%' || #{keyword} || '%'
+          )
+     	</if>
+     	
+     	<if test="search == 2">
+     		AND TITLE LIKE '%' || #{keyword} || '%'
+     	</if>
+     	
+     	<if test="search == 3">
+     		AND B.USERID LIKE '%' || #{keyword} || '%'
+     	</if>
+		
+		<if test="kind !='' and kind != null">
+			AND B.KIND = #{kind}
 		</if>
 	</select>
 	
@@ -71,7 +115,25 @@
 			FROM TBL_COMMENT C
 			JOIN TBL_USER U ON C.USERID = U.USERID
 			WHERE C.BOARDNO = #{boardNo}
+			ORDER BY C.CDATETIME ASC
 	</select>
+	
+	<insert id="commentAdd" parameterType="hashmap">
+		INSERT INTO TBL_COMMENT 
+			VALUES (COMMENT_SEQ.NEXTVAL, #{boardNo}, #{comment}, #{id}, 0, NULL, SYSDATE, SYSDATE)
+	</insert>
+	
+	<delete id="commentDelete" parameterType="hashmap">
+		DELETE 
+		FROM TBL_COMMENT
+		WHERE COMMENTNO = #{commentNo}
+	</delete>
+	
+	<update id="tblCnt" parameterType="hashmap">
+		UPDATE TBL_BOARD
+		SET CNT = CNT + 1
+		WHERE BOARDNO = #{boardNo}
+	</update>
 	
 </mapper>
 

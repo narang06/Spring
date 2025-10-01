@@ -9,5 +9,6 @@ public class Comment {
 	private String userId;
 	private String nickName;
 	private String cdateTime;
+	private String boardNo;
 
 }

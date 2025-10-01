@@ -21,8 +21,19 @@
         tr:nth-child(even){
             background-color: azure;
         }
-        span{
+        .boardTitle{
             color: red;
+        }
+        #index {
+            margin-right: 5px;
+            text-decoration: none;
+        }
+        .active{
+            color: black;
+            font-weight: bold;
+        }
+        a{
+            text-decoration: none;
         }
     </style>
 </head>
@@ -38,6 +49,12 @@
 		    <button @click="fnList()">검색</button>
         </div>
         <div>
+            <select v-model="pageSize" @change="fnList">
+                <option value="5">5개씩</option>
+                <option value="10">10개씩</option>
+                <option value="20">20개씩</option>
+            </select>
+
             <select v-model="kind" @change="fnList">
                 <option value="">전체</option>
                 <option value="1">공지사항</option>
@@ -48,6 +65,8 @@
                 <option value="1">:: 번호순</option>
                 <option value="2">:: 제목순</option>
                 <option value="3">:: 조회순</option>
+                <option value="4">:: 시간순</option>
+                <option value="5">:: 댓글수순</option>
             </select>
         </div>	
         <div>
@@ -64,7 +83,7 @@
                     <td>{{item.boardNo}}</td>
                     <td v-if="">
                         <a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}} </a>
-                        <span v-if="item.commentCount !=0"> [{{item.commentCount}}]</span>
+                        <span v-if="item.commentCount !=0" class="boardTitle"> [{{item.commentCount}}]</span>
                     </td>
                     <td>{{item.userId}}</td>
                     <td>{{item.cnt}}</td>
@@ -75,10 +94,19 @@
                             삭제
                         </button>
                     </td>
-                </tr>
+                </tr>  
             </table>
-            <a href="board-add.do"><button>추가</button></a>
-        </div>
+            <div>
+                <a href="board-add.do"><button>추가</button></a> 
+            </div>
+            <a href="javascript:;" @click="fnPageDown" v-if="page > 1">◀</a>
+            <a href="javascript:;" v-for="num in index" id="index" @click="fnpageChange(num)">
+                <span :class="{active : page == num}">
+                    {{num}}
+                </span>
+            </a>
+            <a href="javascript:;" @click="fnPageUp" v-if="page < index">▶</a>
+        </div>       
     </div>
 </body>
 </html>
@@ -93,6 +121,9 @@
                 sort : 1,
                 search : 1,
                 keyword : "",
+                pageSize : 5,
+                page : 1, // 현재 페이지
+                index : 0, // 최대 페이지 값
                 sessionId : "${sessionId}",
                 status : "${sessionStatus}"
                 
@@ -107,7 +138,9 @@
                     kind : self.kind,
                     sort : self.sort,
                     keyword : self.keyword,
-                    search : self.search
+                    search : self.search,
+                    page : (self.page-1) * self.pageSize,
+                    pageSize : self.pageSize
                 };
                 $.ajax({
                     url: "board-list.dox",
@@ -117,6 +150,7 @@
                     success: function (data) {
                         console.log(data);
                         self.list = data.list;
+                        self.index = Math.ceil(data.cnt / self.pageSize);
 
                     }
                 });
@@ -140,6 +174,22 @@
             },
             fnView: function (boardNo) {
                pageChange("board-view.do", {boardNo : boardNo});
+            },
+            fnpageChange : function(num){
+                let self = this;
+                self.page = num;
+                self.fnList();
+            },
+            fnPageDown (){
+                let self = this;   
+                self.page--;
+                self.fnList();
+                
+            },
+            fnPageUp(){
+                let self = this;
+                self.page++;
+                self.fnList();
             }
         }, // methods
         mounted() {

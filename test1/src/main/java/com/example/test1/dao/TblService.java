@@ -18,8 +18,10 @@ public class TblService {
 		
 	public HashMap<String, Object> tblList(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int cnt = tblMapper.tblListCnt(map);
 		List<Tbl> list = tblMapper.tblList(map);
 		
+		resultMap.put("cnt",cnt);
 		resultMap.put("list", list);
 		resultMap.put("result","success");
 		return resultMap;
@@ -43,13 +45,50 @@ public class TblService {
 	
 	public HashMap<String, Object> tblInfo(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		tblMapper.tblCnt(map);
 		Tbl info = tblMapper.tblInfo(map);
-		List<Comment> commentList = tblMapper.tblCommentInfo(map);
+		List<Comment> commentList = tblMapper.tblCommentInfo(map);		
+		
+		
 		
 		resultMap.put("commentList", commentList);
 		resultMap.put("info", info);
 		resultMap.put("result","success");
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> commentAdd(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int cnt = tblMapper.commentAdd(map);
+			resultMap.put("result","success");
+			resultMap.put("msg","댓글이 등록되었습니다.");
+		} catch (Exception e) {
+			resultMap.put("result","fail");
+			resultMap.put("msg","서버오류가 발생했습니다. 다시 시도해주세요.");
+		}
+			
+		
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> commentDelete(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int cnt = tblMapper.commentDelete(map);
+			resultMap.put("result","success");
+			resultMap.put("msg","댓글이 삭제되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("result","fail");
+			resultMap.put("msg","서버오류가 발생했습니다. 다시 시도해주세요.");
+		}
+						
+		return resultMap;
+	}
+	
+	
 	
 }

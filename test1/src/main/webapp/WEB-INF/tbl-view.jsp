@@ -37,6 +37,10 @@
                     <td>{{info.userId}}</td>
                 </tr>
                 <tr>
+                    <th>조회수</th>
+                    <td>{{info.cnt}}</td>
+                </tr>  
+                <tr>
                     <th>내용</th>
                     <td>{{info.contents}}</td>
                 </tr>  
@@ -52,7 +56,7 @@
                         <th>댓글 작성자</th>
                         <td>{{comment.nickName}}</td>
                         <th v-if="comment.userId == sessionId || status == 'A'">
-                            <button @click="fnCommentDelete">삭제</button>
+                            <button @click="fnCommentDelete(commentNo)">삭제</button>
                         </th>
                     </tr>  
                     <tr>
@@ -69,9 +73,11 @@
         <table id="commentInput">
             <th>댓글 입력</th>
             <td>
-                <textarea cols="40" rows="4"></textarea>
+                <textarea cols="40" rows="4" v-model="comment"></textarea>
             </td>
-            <td><button>저장</button></td>
+            <td>
+                <button @click="fnCommentAdd">저장</button>
+            </td>
         </table>
     </div>
 </body>
@@ -85,8 +91,9 @@
                 boardNo : "${boardNo}",
                 info : {},
                 commentList : [],
-                // sessionId : "${sessionId}",
-                // status : "${sessionStatus}"
+                comment : "",
+                sessionId : "${sessionId}",
+                status : "${sessionStatus}"
             };
         },
         methods: {
@@ -113,6 +120,41 @@
             },
             fnUpdate(boardNo){
                 pageChange("board-add.do", {boardNo : boardNo});
+            },
+            fnCommentAdd (){
+                let self = this;
+                let param = {
+                    boardNo : self.boardNo,
+                    id : self.sessionId,
+                    comment : self.comment
+                };
+                $.ajax({
+                    url: "/comment/add.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert("댓글이 추가되었습니다.");
+                        self.comment = "";
+                        self.fnInfo();
+                    }
+                });
+            },
+            fnCommentDelete(commentNo){
+                let self = this;
+                let param = {
+                    commentNo : commentNo
+                };
+                $.ajax({
+                    url: "/comment/delete.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert(data.msg);
+                        self.fnInfo();
+                    }
+                });
             }
         }, // methods
         mounted() {
