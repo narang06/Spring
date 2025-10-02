@@ -72,6 +72,7 @@
         <div>
             <table>
                 <tr>
+                    <th><input type="checkbox" @click="fnAllCheck" v-if="status == 'A'"></th>
                     <th>번호</th>
                     <th>제목</th>
                     <th>작성자</th>
@@ -80,6 +81,9 @@
                     <th>삭제</th>
                 </tr>
                 <tr v-for="item in list">
+                    <td>
+                        <input type="checkbox" :value="item.boardNo" v-model="selectItem">
+                    </td>
                     <td>{{item.boardNo}}</td>
                     <td v-if="">
                         <a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}} </a>
@@ -97,7 +101,8 @@
                 </tr>  
             </table>
             <div>
-                <a href="board-add.do"><button>추가</button></a> 
+                <a href="board-add.do"><button>글 작성</button></a>
+                <button @click="fnAllRemove" v-if="status == 'A'">선택 삭제</button> 
             </div>
             <a href="javascript:;" @click="fnPageDown" v-if="page > 1">◀</a>
             <a href="javascript:;" v-for="num in index" id="index" @click="fnpageChange(num)">
@@ -125,7 +130,9 @@
                 page : 1, // 현재 페이지
                 index : 0, // 최대 페이지 값
                 sessionId : "${sessionId}",
-                status : "${sessionStatus}"
+                status : "${sessionStatus}",
+                selectItem : [],
+                selectFlg : false
                 
                 
             };
@@ -190,7 +197,37 @@
                 let self = this;
                 self.page++;
                 self.fnList();
-            }
+            },
+            fnAllCheck(){
+                let self = this;
+                self.selectFlg = !self.selectFlg;
+
+                if(self.selectFlg){
+                    self.selectItem= [];
+                    for(let i = 0; i<self.list.length; i++){
+                    self.selectItem.push(self.list[i].boardNo);
+                    }
+                } else {
+                    self.selectItem = [];
+                }            
+            },
+            fnAllRemove(){
+                let self = this;
+
+                var fList = JSON.stringify(self.selectItem);
+                var param = {selectItem : fList};
+               
+                $.ajax({
+                    url: "/board/deletelist.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert("선택하신 항목이 삭제되었습니다.");
+                        self.fnList();
+                    }
+                });
+            },
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분

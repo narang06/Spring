@@ -42,7 +42,11 @@
                 </tr>  
                 <tr>
                     <th>내용</th>
-                    <td>{{info.contents}}</td>
+                    <td>
+                        <img v-for="item in fileList" :src="item.filePath">
+                        <br>
+                        {{info.contents}}
+                    </td>
                 </tr>  
             </table>
             <button @click="fnBack()">뒤로가기</button>
@@ -93,7 +97,8 @@
                 commentList : [],
                 comment : "",
                 sessionId : "${sessionId}",
-                status : "${sessionStatus}"
+                status : "${sessionStatus}",
+                fileList : []
             };
         },
         methods: {
@@ -112,6 +117,7 @@
                         console.log(data);
                         self.info = data.info;
                         self.commentList = data.commentList;
+                        self.fileList = data.fileList;
                     }
                 });
             },

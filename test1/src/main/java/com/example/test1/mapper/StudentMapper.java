@@ -18,4 +18,7 @@ public interface StudentMapper {
 	int removeStudentList(HashMap<String, Object> map);
 	// 학생 상세 정보
 	Student getStudentInfo(HashMap<String, Object> map);
+	// 학생 정보 전부 삭제
+	int deleteList(HashMap<String, Object> map);
+	
 }

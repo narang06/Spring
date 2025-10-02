@@ -17,6 +17,9 @@ public interface TblMapper {
 	// 게시글 삭제
 	int tblDelete(HashMap<String, Object> map);
 	
+	// 게시글 선택 삭제
+	int deleteList(HashMap<String, Object> map);
+	
 	// 게시글 추가
 	int tblAdd(HashMap<String, Object> map);
 	
@@ -37,6 +40,12 @@ public interface TblMapper {
 	
 	// 댓글 삭제
 	int commentDelete(HashMap<String, Object> map);
+	
+	// 첨부파일 업로드
+	int insertTblimg(HashMap<String, Object> map);
+	
+	// 첨부파일 상세보기
+	List<Tbl> TblimgInfo(HashMap<String, Object> map);
 	
 	
 	

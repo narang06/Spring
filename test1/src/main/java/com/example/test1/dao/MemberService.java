@@ -64,5 +64,10 @@ public class MemberService {
 		
 		return resultMap;
 	}
+
+	public void addMemberImg(HashMap<String, Object> map) {
+		int cnt = memberMapper.insertMemberimg(map);
+		
+	}
 	
 }

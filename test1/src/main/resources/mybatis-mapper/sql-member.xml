@@ -19,6 +19,11 @@
 		INSERT INTO TBL_USER
 		VALUES(#{id}, #{pwd}, #{name}, NULL, NULL, NULL, #{addr}, #{phone}, NULL, #{gender}, #{status}, SYSDATE, SYSDATE)
 	</insert>
+	
+	<insert id="insertMemberimg" parameterType="hashmap">
+		INSERT INTO TBL_USER_FILE
+		VALUES(FILE_SEQ.NEXTVAL, #{userId}, #{path}, #{fileName}, #{orgName}, #{size}, #{ext})
+	</insert>
 </mapper>
 
 

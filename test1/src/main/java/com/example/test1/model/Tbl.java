@@ -13,5 +13,10 @@ public class Tbl {
 	private String kind;
 	private String cdate;
 	private String commentCount;
+	
+	// board file
+	private String fileNo;
+	private String fileName;
+	private String filePath;
 
 }

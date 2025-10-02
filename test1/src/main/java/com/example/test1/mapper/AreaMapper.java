@@ -19,4 +19,10 @@ public interface AreaMapper {
 	// area 내 si/do 리스트
 	List<Area> selectSiList(HashMap<String, Object> map);
 	
+	// area 내 gu 리스트
+	List<Area> selectGuList(HashMap<String, Object> map);
+	
+	// area 내 dong 리스트
+	List<Area> selectDongList(HashMap<String, Object> map);
+	
 }

@@ -80,6 +80,9 @@
             </select>
         </div>
         <div>
+            이미지 첨부 : <input type="file" id="file1" name="file1" accept=".jpg, .png">
+        </div>
+        <div>
             <button @click="fnJoin">회원가입</button>
         </div>
         
@@ -132,7 +135,7 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        if(data.result == "true"){
+                        if(data.result != "true"){
                             alert("이미 사용중인 아이디 입니다");
                         } else {
                             alert("사용 가능한 아이디 입니다");
@@ -265,6 +268,19 @@
                 } else {
                     alert("문자인증에 실패했습니다.");
                 }
+            },
+            upload : function(form){
+                var self = this;
+                $.ajax({
+                    url : "/user/fileUpload.dox",
+                    type : "POST",
+                    processData : false,
+                    contentType : false,
+                    data : form,
+                    success:function(data) { 
+                        console.log(data)
+                    }	           
+                });
             }
         }, // methods
         mounted() {

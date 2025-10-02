@@ -37,6 +37,17 @@
             <option value="">:: 전체 ::</option>
             <option :value="item.si" v-for="item in siList">{{item.si}}</option>
         </select>
+        구 :
+        <select v-model="gu" @fnGuChange>
+            <option value="">:: 선택 ::</option>
+            <option :value="item.gu" v-for="item in guList">{{item.gu}}</option>
+        </select>
+        동
+        <select v-model="dong">
+            <option value="">:: 선택 ::</option>
+            <option :value="item.dong" v-for="item in dongList">{{item.dong}}</option>
+        </select>
+        <button @click="fnSearch">검색</button>
         <table>
             <tr>
                 <th>시</th>
@@ -76,7 +87,11 @@
                endPage : 0,
                pageList: [],
                siList : [],
-               si : "" // 선택한 시/도의 값
+               si : "", // 선택한 시/도의 값
+               guList : [],
+               gu : "", // 선택한 구 값
+               dong : "",
+               dongList: []
             };
         },
         methods: {
@@ -102,7 +117,9 @@
                 let param = {
                     page : (self.page-1) * self.pageSize,
                     pageSize : self.pageSize,
-                    si : self.si
+                    si : self.si,
+                    gu : self.gu,
+                    dong : self.dong
                 };
                 $.ajax({
                     url: "/area/list.dox",
@@ -140,15 +157,59 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        self.siList = data.list;
+                        self.siList = data.siList;
                     }
                 });
             },
-            fnSiChange (){
+            fnSiChange() {
+                let self = this;
+                self.gu = "";
+                self.dong = "";
+                self.dongList = [];
+                self.fnGuList(); 
+                
+            },
+             fnGuChange() {
+                  let self = this;
+                  self.dong = "";
+                  self.fnDongList(); 
+              },
+            fnSearch (){
                 let self = this;
                 self.page = 1;
                 self.fnAreaList();
-            }
+            },
+            fnGuList: function () {
+                let self = this;      
+                let param = {
+                    si : self.si
+                };
+                $.ajax({
+                    url: "/area/gu.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        self.guList = data.guList;
+                    }
+                });
+            },
+            fnDongList: function () {
+                let self = this;      
+                let param = {
+                    si : self.si,
+                    gu : self.gu
+                };
+                $.ajax({
+                    url: "/area/dong.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        self.dongList = data.dongList;
+                    }
+                });
+            },
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분

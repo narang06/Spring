@@ -33,8 +33,36 @@ public class AreaService {
 		
 		List<Area> list = areaMapper.selectSiList(map);
 		
-		resultMap.put("list", list);
+		resultMap.put("siList", list);
 		resultMap.put("result", "success");
+		
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> getGuList(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<Area> list = areaMapper.selectGuList(map);
+			resultMap.put("guList", list);
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> getDongList(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<Area> list = areaMapper.selectDongList(map);
+			resultMap.put("dongList", list);
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			resultMap.put("result", "fail");
+		}
 		
 		return resultMap;
 	}

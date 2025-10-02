@@ -17,7 +17,7 @@
 	<delete id="removeStudentList" parameterType="hashmap">
 		DELETE 
 		FROM STUDENT
-		WHERE STUNO = #{stuNo}
+		WHERE STU_NO = #{stuNo}
 	</delete>
 	
 	<select id="getStudentInfo" parameterType="hashmap" resultType="com.example.test1.model.Student">
@@ -30,6 +30,15 @@
 		WHERE S.STU_NO = #{stuNo}
 		GROUP BY S.STU_NAME, S.STU_DEPT
 	</select>
+	
+	<delete id="deleteList" parameterType="hashmap">
+		DELETE 
+		FROM STUDENT
+		WHERE STU_NO IN 
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
 </mapper>
 
 
