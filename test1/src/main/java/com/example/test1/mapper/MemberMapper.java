@@ -22,5 +22,13 @@ public interface MemberMapper {
 	// 로그인 이미지 업로드
 	int insertMemberimg(HashMap<String, Object> map);
 	
+	// 관리자 로그인
+	List<Member> adminLogin(HashMap<String, Object> map);
+	
+	// 로그인 오류 횟수 증가
+	int updateLoginCnt(HashMap<String, Object> map);
+	
+	// 로그인 오류 횟수 초기화
+	int resetLoginCnt(HashMap<String, Object> map);
 	
 }

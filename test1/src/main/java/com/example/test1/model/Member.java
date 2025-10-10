@@ -7,7 +7,11 @@ public class Member {
 	private String userId;
 	private String password;
 	private String name;
+	private String gender;
 	private String birth;
 	private String nickName;
 	private String status;
+	private int cnt;
+	private String cBirth;
+	
 }

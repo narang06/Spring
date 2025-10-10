@@ -42,14 +42,37 @@ public class MemberController {
 
         return "jusoPopup";
     }
+	
+	@RequestMapping("mgr/member/list.do") 
+    public String mgrList(Model model) throws Exception{
+
+        return "/Mgr/member-list";
+    }
+	
+	@RequestMapping("/mgr/member/view.do") 
+    public String mgrInfo(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		
+		request.setAttribute("userId",map.get("userId"));
+        return "/Mgr/member-view";
+    }
 
 	
-	@RequestMapping(value = "member/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/member/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println(map);
 		resultMap = memberService.memberLogin(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/mgr/member/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String mgr(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println(map);
+		resultMap = memberService.adminLogin(map);
 		
 		return new Gson().toJson(resultMap);
 	}
@@ -137,5 +160,14 @@ public class MemberController {
 		fileName += extName;
 		
 		return fileName;
+	}
+	
+	@RequestMapping(value = "/mgr/member/list/reset.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String reset(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = memberService.memberCntReset(map);
+		
+		return new Gson().toJson(resultMap);
 	}
 }

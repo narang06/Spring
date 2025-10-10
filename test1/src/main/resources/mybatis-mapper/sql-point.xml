@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.PointMapper">
+	<select id="selectPointList" parameterType="hashmap" resultType="com.example.test1.model.Point">
+		SELECT 
+		    C.USERID,
+		    C.NAME,
+		    C.ADDRESS,
+		    C.GENDER,
+		    P1.APOINT POINT,
+		    CDATE
+		FROM TBL_CUSTOMER C
+		JOIN TBL_POINT P1 ON C.USERID = P1.USERID
+		JOIN 
+		    (
+		        SELECT 
+		            USERID,
+		            MAX(CDATETIME) CDATE
+		        FROM 
+		            TBL_POINT
+		        GROUP BY 
+		            USERID
+		    ) P2 ON P1.USERID = P2.USERID AND P1.CDATETIME = P2.CDATE
+	</select>
+</mapper>
+
+
+
+

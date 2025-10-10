@@ -24,18 +24,15 @@
 </head>
 <body>
     <div id="app">
-        <div>
-            <div>
-                <label>아이디: <input v-model="id"></label>
-            </div>
-            <div>
-                <label>비밀번호: <input type="password" v-model="pwd"></label>
-            </div>
-            <div>
-                <button @click="fnLogin">로그인</button>
-                <a href="/member/join.do"><button>회원가입</button></a>
-            </div>
-        </div>
+        <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+         <table>
+            <h3>{{}}</h3>
+            <tr>
+                <th>아이디</th>
+                <th>아이디</th>
+                <th>아이디</th>
+            </tr>
+         </table>
     </div>
 </body>
 </html>
@@ -44,36 +41,31 @@
     const app = Vue.createApp({
         data() {
             return {
-                id : "",
-                pwd : ""
+                // 변수 - (key : value)
+                userId : "${userId}",
+                
             };
         },
         methods: {
-            fnLogin: function () {
+            // 함수(메소드) - (key : function())
+            fnList: function () {
                 let self = this;
                 let param = {
-                    id : self.id,
-                    pwd : self.pwd
+                    userId : self.userId
                 };
                 $.ajax({
-                    url: "/member/login.dox",
+                    url: "",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        console.log(data);
-                        alert(data.msg);
-                        if(data.result == "admin"){
-                            location.href="/mgr/member/list.do"; // 관리자일 경우 회원관리 페이지로 이동
-                        } else if(data.result == "success") {
-                           location.href="/main.do"; 
-                        }
                         
                     }
                 });
             }
         }, // methods
         mounted() {
+            // 처음 시작할 때 실행되는 부분
             let self = this;
         }
     });
