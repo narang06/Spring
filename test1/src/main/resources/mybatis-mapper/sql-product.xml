@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.ProductMapper">
+	<select id="productList" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT 
+		    *
+		FROM TBL_FOOD TF
+		JOIN TBL_FOOD_IMG TFI ON TF.FOOD_NO = TFI.FOOD_NO
+	</select>
+	
+	<select id="productListSearch" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT 
+		    *
+		FROM TBL_FOOD TF
+		JOIN TBL_FOOD_IMG TFI ON TF.FOOD_NO = TFI.FOOD_NO
+		WHERE TF.FOOD_NAME LIKE '%' || #{keyword} || '%' OR
+		TF.FOOD_INFO LIKE '%' || #{keyword} || '%'
+		<if test="menuNo != null and menuNo != ''">
+		AND F.MENU_NO = #{menuNo}
+		</if>
+		<if test="menuPart != null and menuPart != ''">
+		AND F.MENU_PART = #{menuPart}
+		</if>
+	</select>
+	
+	<select id="selectMenuList" parameterType="hashmap" resultType="com.example.test1.model.Menu">
+		SELECT M.*, NVL(CNT, 0) AS CNT
+		FROM TBL_MENU M
+		LEFT JOIN (
+		    SELECT MENU_PART, COUNT(MENU_PART) AS CNT
+		    FROM TBL_MENU
+		    GROUP BY MENU_PART
+		) T ON M.MENU_NO = T.MENU_PART
+	</select>
+	
+	<!--<insert id="productAdd" parameterType="hashmap">
+		INSERT INTO TBL_FOOD 
+		VALUSE (FOOD_SEQ.NEXTVAL, #{foodName}, #{price}, #{foodInfo}, #{}, #{kind})
+	</insert>-->
+	
+	
+	
+
+	
+</mapper>
+
+
+
+

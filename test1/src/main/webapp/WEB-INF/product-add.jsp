@@ -24,7 +24,27 @@
 </head>
 <body>
     <div id="app">
-        <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+        <h3>음식 추가</h3>
+        음식 종류 : 
+        <select id="kind">      
+            <option value="10">한식</option>
+            <option value="20">중식</option>
+            <option value="30">양식</option>
+        </select>
+        <div>
+            <label>이름: <input type="text" v-model="name"></label>
+        </div>
+        <div>
+            <label>가격: <input type="text" v-model="price"></label>
+        </div>
+        <div>
+            <label>설명: <input type="text" v-model="info"></label>
+        </div>
+        <div>
+            <label>이미지: <input type="file" v-modul="image"></label>
+        </div>
+        <button @click="fnAdd">추가</button>
+        <button>취소</button>
     </div>
 </body>
 </html>
@@ -34,15 +54,26 @@
         data() {
             return {
                 // 변수 - (key : value)
+                name : "",
+                price : "",
+                info : "",
+                image : "",
+                kind : ""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnList: function () {
+            fnAdd: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    name : self.name,
+                    price : self.price,
+                    info : self.info,
+                    kind : self.kind
+
+                };
                 $.ajax({
-                    url: "",
+                    url: "/product/add.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
