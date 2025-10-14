@@ -21,6 +21,10 @@ public interface ProductMapper {
 	List<Menu> selectMenuList(HashMap<String, Object> map);
 	// 메뉴 추가
 	int productAdd(HashMap<String, Object> map);
+	// 음식 이미지 추가
+	int insertFoodimg(HashMap<String, Object> map);
+	// 음식 상세보기
+	Product getProductInfo(HashMap<String, Object> map);
 	
 	
 }

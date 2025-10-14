@@ -48,8 +48,24 @@ public class ProductService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-			int cnt = productMapper.productAdd(map);
-			resultMap.put("",cnt);
+			productMapper.productAdd(map);
+			resultMap.put("foodNo", map.get("foodNo"));
+			resultMap.put("result","success");
+		} catch (Exception e) {
+			// TODO: handle exception
+			resultMap.put("result","fail");
+			System.out.print(e.getMessage());
+		}
+		
+		return resultMap;
+	}
+
+	public HashMap<String, Object> getMenuList(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<Menu> menuList = productMapper.selectMenuList(map);
+			resultMap.put("menuList",menuList);
 			resultMap.put("result","success");
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -59,6 +75,31 @@ public class ProductService {
 		return resultMap;
 	}
 
+	public HashMap<String, Object> addFoodImg(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			productMapper.insertFoodimg(map);
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+	}
 
-	
+	public HashMap<String, Object> productInfo(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			Product info = productMapper.getProductInfo(map);
+			resultMap.put("info", info);
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			resultMap.put("result", "fail");
+			System.out.print(e.getMessage());
+		}
+		
+		return resultMap;
+		
+	}	
 }

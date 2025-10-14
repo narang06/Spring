@@ -86,7 +86,7 @@
                     </td>
                     <td>{{item.boardNo}}</td>
                     <td v-if="">
-                        <a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}} </a>
+                        <a href="javascript View(item.boardNo)">{{item.title}} </a>
                         <span v-if="item.commentCount !=0" class="boardTitle"> [{{item.commentCount}}]</span>
                     </td>
                     <td>{{item.userId}}</td>

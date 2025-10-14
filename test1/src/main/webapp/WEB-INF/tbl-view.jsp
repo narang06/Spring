@@ -109,7 +109,7 @@
                     boardNo : self.boardNo
                 };
                 $.ajax({
-                    url: "board-view.dox",
+                    url: "/product-view.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,

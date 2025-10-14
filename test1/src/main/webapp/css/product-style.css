@@ -98,6 +98,7 @@ nav ul li a:hover {
 /* 로그인 버튼 스타일 */
 .login-btn button {
 	padding: 8px 15px;
+	margin: 5px;
 	background-color: #ff6600;
 	color: white;
 	border: none;

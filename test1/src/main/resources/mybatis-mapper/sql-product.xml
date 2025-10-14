@@ -18,10 +18,10 @@
 		WHERE TF.FOOD_NAME LIKE '%' || #{keyword} || '%' OR
 		TF.FOOD_INFO LIKE '%' || #{keyword} || '%'
 		<if test="menuNo != null and menuNo != ''">
-		AND F.MENU_NO = #{menuNo}
+		AND TF.MENU_NO = #{menuNo}
 		</if>
 		<if test="menuPart != null and menuPart != ''">
-		AND F.MENU_PART = #{menuPart}
+		AND TF.MENU_PART = #{menuPart}
 		</if>
 	</select>
 	
@@ -33,16 +33,24 @@
 		    FROM TBL_MENU
 		    GROUP BY MENU_PART
 		) T ON M.MENU_NO = T.MENU_PART
+		<if test ="depth != null and depth != ''">
+			WHERE DEPTH = #{depth}
+		</if>
 	</select>
 	
-	<!--<insert id="productAdd" parameterType="hashmap">
+	<insert id="productAdd" parameterType="hashmap" useGeneratedKeys="true" keyColumn="FOOD_NO" keyProperty="foodNo">
 		INSERT INTO TBL_FOOD 
-		VALUSE (FOOD_SEQ.NEXTVAL, #{foodName}, #{price}, #{foodInfo}, #{}, #{kind})
-	</insert>-->
+		VALUES (FOOD_SEQ.NEXTVAL, #{foodName}, #{price}, '', #{foodInfo}, 'Y', #{menuNo}, #{menuPart})
+	</insert>
 	
+	<insert id="insertFoodimg" parameterType="hashmap">
+		INSERT INTO TBL_FOOD_IMG
+		VALUES (FOODFILE_SEQ.NEXTVAL, #{foodNo}, #{path}, #{fileName}, #{orgName}, #{size}, #{ext}, 'Y')
+	</insert>
 	
-	
-
+	<select id="getProductInfo" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT * FROM TBL_FOOD WHERE FOOD_NO = #{foodNo}
+	</select>
 	
 </mapper>
 
