@@ -31,4 +31,10 @@ public interface MemberMapper {
 	// 로그인 오류 횟수 초기화
 	int resetLoginCnt(HashMap<String, Object> map);
 	
+	// 유저 인증 정보 확인
+	Member authUser(HashMap<String, Object> map);
+	
+	// 비밀번호 수정
+	int changePwd(HashMap<String, Object> map);
+	
 }

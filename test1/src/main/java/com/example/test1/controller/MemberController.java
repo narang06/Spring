@@ -55,6 +55,12 @@ public class MemberController {
 		request.setAttribute("userId",map.get("userId"));
         return "/Mgr/member-view";
     }
+	
+	@RequestMapping("member/pwd.do") 
+    public String pwdSearch(Model model) throws Exception{
+
+        return "/Member/pwd";
+    }
 
 	
 	@RequestMapping(value = "/member/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -167,6 +173,24 @@ public class MemberController {
 	public String reset(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = memberService.memberCntReset(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/member/pwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String memberAuth(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = memberService.authUser(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/member/pwdChange.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String changePwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = memberService.changePwd(map);
 		
 		return new Gson().toJson(resultMap);
 	}

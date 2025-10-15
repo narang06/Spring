@@ -6,7 +6,7 @@
 	<select id="memberLogin" parameterType="hashmap" resultType="com.example.test1.model.Member">
 		SELECT *
 		FROM TBL_USER
-		WHERE USERID = #{id} AND PASSWORD = #{pwd}
+		WHERE USERID = #{id}
 	</select>
 	
 	<select id="idCheck" parameterType="hashmap" resultType="com.example.test1.model.Member">
@@ -17,7 +17,7 @@
 	
 	<insert id="memberAdd" parameterType="hashmap">
 		INSERT INTO TBL_USER
-		VALUES(#{id}, #{pwd}, #{name}, NULL, NULL, NULL, #{addr}, #{phone}, NULL, #{gender}, #{status}, SYSDATE, SYSDATE)
+		VALUES(#{id}, #{hashPwd}, #{name}, NULL, NULL, NULL, #{addr}, #{phone}, NULL, #{gender}, #{status}, SYSDATE, SYSDATE, 0)
 	</insert>
 	
 	<insert id="insertMemberimg" parameterType="hashmap">
@@ -48,6 +48,18 @@
 		UPDATE TBL_USER 
 		SET CNT = 0
 		WHERE USERID = #{id}
+	</update>
+	
+	<select id="authUser" parameterType="hashmap" resultType="com.example.test1.model.Member">
+		SELECT *
+		FROM TBL_USER
+		WHERE USERID = #{userId} AND NAME = #{name} AND REPLACE(PHONE, '-', '') = #{phone}
+	</select>
+	
+	<update id="changePwd" parameterType="hashmap">
+		UPDATE TBL_USER
+		SET PASSWORD = #{hashPwd}
+		WHERE USERID = #{userId}
 	</update>
 </mapper>
 
