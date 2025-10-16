@@ -112,7 +112,7 @@
 	</delete>
 	
 	<insert id="tblAdd" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARDNO" keyProperty="boardNo">
-		INSERT INTO TBL_BOARD VALUES (B_SEQ.NEXTVAL, #{title}, #{content}, #{userId}, 0, 0, 3, SYSDATE, SYSDATE)
+		INSERT INTO TBL_BOARD VALUES (B_SEQ.NEXTVAL, #{title}, '', #{userId}, 0, 0, 3, SYSDATE, SYSDATE, #{content})
 	</insert>
 	
 	<select id="tblInfo" parameterType="hashmap" resultType="com.example.test1.model.Tbl">

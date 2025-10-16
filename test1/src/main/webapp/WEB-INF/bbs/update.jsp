@@ -46,7 +46,7 @@
             </tr> 
             <tr>
                 <th>내용</th>
-                <td><div id="editor"></div></td>
+                <td><textarea v-model="content" cols="40" rows="20"></textarea></td>
             </tr>     
         </table>
         <button @click="fnAdd()">작성</button>
@@ -78,39 +78,25 @@
                     content : self.content
                 };
                 $.ajax({
-                    url: "board-add.dox",
+                    url: "/bbs/add.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
-                    success: function (data) {
-                        alert("추가되었습니다.");
+                    success: function (data) {         
                         console.log(data.boardNo);
                         var form = new FormData();
                         form.append( "file1",  $("#file1")[0].files[0] );
-                        form.append( "boardNo",  data.boardNo);  
+                        form.append( "bbsNum",  data.bbsNum);  
                         self.upload(form);
-                        // location.href="board-list.do"
-                    }
-                });
-            },
-            fnList: function () {
-                let self = this;
-                let param = {
-                };
-                $.ajax({
-                    url: "",
-                    dataType: "json",
-                    type: "POST",
-                    data: param,
-                    success: function (data) {
-                        
+                        // location.href="/bbs/list.do"
+                        alert("추가되었습니다.");
                     }
                 });
             },
             upload : function(form){
                 var self = this;
                 $.ajax({
-                    url : "/fileUpload.dox",
+                    url : "/bbs/fileUpload.dox",
                     type : "POST",
                     processData : false,
                     contentType : false,
@@ -124,29 +110,7 @@
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            self.fnList();
-            // Quill 에디터 초기화
-            var quill = new Quill('#editor', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                        ['bold', 'italic', 'underline'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['link', 'image'],
-                        ['clean']
-                    ]
-                }
-            });
-
-            // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
-            quill.on('text-change', function() {
-                self.content = quill.root.innerHTML;
-            });
-            if(self.sessionId == ""){
-                alert("로그인 후 이용해주세요.");
-                location.href ="/member/login.do";
-            }
+            
         }
     });
 

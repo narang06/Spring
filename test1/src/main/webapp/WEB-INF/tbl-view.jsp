@@ -46,6 +46,7 @@
                         <img v-for="item in fileList" :src="item.filePath">
                         <br>
                         {{info.contents}}
+                        <div v-html="info.contents2"></div>
                     </td>
                 </tr>  
             </table>
@@ -109,7 +110,7 @@
                     boardNo : self.boardNo
                 };
                 $.ajax({
-                    url: "/product-view.dox",
+                    url: "/board-view.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,

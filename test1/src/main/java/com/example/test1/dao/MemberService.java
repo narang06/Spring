@@ -205,21 +205,22 @@ public class MemberService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-//			Member member = memberMapper.memberLogin(map);
-//			boolean pwdFlg = passwordEncoder.matches((String) map.get("pwd"),);
-//			if(pwdFlg) {
-//				resultMap.put("result", "fail");
-//				resultMap.put("msg", "비밀번호가 이전과 동일합니다.");
-//			} else {
-//				
-//			}
-			String hashPwd = passwordEncoder.encode((String) map.get("pwd"));
-			map.put("hashPwd", hashPwd);
-			memberMapper.changePwd(map);
-			resultMap.put("result", "success");
+			Member member = memberMapper.memberLogin(map);
+			boolean pwdFlg = passwordEncoder.matches((String) map.get("pwd"),member.getPassword());
+			if(pwdFlg) {
+				resultMap.put("result", "fail");
+				resultMap.put("msg", "비밀번호가 이전과 동일합니다.");
+			} else {
+				String hashPwd = passwordEncoder.encode((String) map.get("pwd"));
+				map.put("hashPwd", hashPwd);
+				memberMapper.changePwd(map);
+				resultMap.put("result", "success");
+				resultMap.put("msg", "수정되었습니다.");
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			resultMap.put("result", "fail");
+			resultMap.put("msg", "오류가 발생했습니다..");
 			System.out.println(e.toString()); // 에러 로그 출력
 		}
 		return resultMap;

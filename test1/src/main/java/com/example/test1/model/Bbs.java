@@ -3,21 +3,17 @@ package com.example.test1.model;
 import lombok.Data;
 
 @Data
-public class Tbl {
-	private String boardNo;
+public class Bbs {
+	private String bbsNum;
 	private String title;
 	private String contents;
-	private String contents2;
+	private int hit;
 	private String userId;
-	private String cnt;
-	private String favorite;
-	private String kind;
-	private String cdate;
-	private String commentCount;
-	
+	private String cdatetime;
+	private String udatetime;
 	// board file
 	private String fileNo;
 	private String fileName;
 	private String filePath;
-
+	
 }

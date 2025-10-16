@@ -3,6 +3,7 @@ package com.example.test1.controller;
 import java.io.File;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,69 +17,71 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.test1.dao.ProductService;
+import com.example.test1.dao.BbsService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 @Controller
-public class ProductController {
-	
+public class BbsController {
+
 	@Autowired
-	ProductService productService;
+	BbsService bbsService;
 	
-	@RequestMapping("/product.do") 
-    public String product(Model model) throws Exception{
-        return "/product";
+	@RequestMapping("/bbs/list.do") 
+    public String list(Model model) throws Exception{
+
+        return "bbs/list";
     }
 	
-	@RequestMapping("/product/add.do") 
-    public String productAdd(Model model) throws Exception{
-        return "/product-add";
+	@RequestMapping("/bbs/add.do") 
+    public String add(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("bbsNum",map.get("bbsNum"));
+        return "bbs/add";
     }
 	
-	@RequestMapping("/product/view.do") 
-    public String productView(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		request.setAttribute("foodNo",map.get("foodNo"));
-        return "/product-view";
+	@RequestMapping("/bbs/view.do") 
+    public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("bbsNum",map.get("bbsNum"));
+        return "bbs/view";
     }
 	
-	@RequestMapping(value = "/product/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping("/bbs/update.do")
+	public String updatePage(Model model, @RequestParam("bbsNum") int bbsNum) throws Exception {
+
+	    // 서비스의 bbsInfo 메소드를 재활용하여 기존 게시물 정보를 가져옵니다.
+	    HashMap<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("bbsNum", bbsNum);
+	    HashMap<String, Object> resultMap = bbsService.bbsInfo(paramMap);
+
+	    // 조회된 정보를 "info"라는 이름으로 모델에 담습니다.
+	    model.addAttribute("info", resultMap.get("info"));
+
+	    // /WEB-INF/views/bbs/update.jsp 파일을 화면에 보여줍니다.
+	    return "bbs/update";
+	}
+	
+	@RequestMapping(value = "/bbs/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String product(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String list(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = productService.getProductList(map);
+		System.out.println(map);
+		resultMap = bbsService.bbsList(map);
 		
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value = "/product/listSearch.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/bbs/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String productSearch(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String bbsAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = productService.getProductListSearch(map);
+		resultMap = bbsService.bbsAdd(map);
 		
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value = "/product/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String productAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = productService.addProductList(map);
-		
-		return new Gson().toJson(resultMap);
-	}
-	
-	@RequestMapping(value = "/product/menu.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String menu(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = productService.getMenuList(map);
-		
-		return new Gson().toJson(resultMap);
-	}
-	
-	@RequestMapping("/product/fileUpload.dox")
-	public String result(@RequestParam("file1") MultipartFile multi, @RequestParam("foodNo") int foodNo, HttpServletRequest request,HttpServletResponse response, Model model)
+	@RequestMapping("/bbs/fileUpload.dox")
+	public String result(@RequestParam("file1") MultipartFile multi, @RequestParam("bbsNum") int bbsNum, HttpServletRequest request,HttpServletResponse response, Model model)
 	{
 		String url = null;
 		String path="c:\\img";
@@ -106,24 +109,24 @@ public class ProductController {
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("fileName", saveFileName);
 				map.put("path", "/img/" + saveFileName);
-				map.put("foodNo", foodNo);
+				map.put("bbsNum", bbsNum);
 				map.put("orgName",originFilename);
 				map.put("size", size);
 				map.put("ext", extName);
 				
 				// insert 쿼리 실행
-			    productService.addFoodImg(map);
+			    bbsService.addBbsImg(map);
 				
 				
 				model.addAttribute("filename", multi.getOriginalFilename());
 				model.addAttribute("uploadPath", file.getAbsolutePath());
 				
-				return "redirect:product.do";
+				return "redirect:list.do";
 			}
 		}catch(Exception e) {
 			System.out.println(e);
 		}
-		return "redirect:product.do";
+		return "redirect:list.do";
 	}
 	    
 	// 현재 시간을 기준으로 파일 이름 생성
@@ -143,24 +146,36 @@ public class ProductController {
 		return fileName;
 	}
 	
-	@RequestMapping(value = "/product-view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/bbs/delete.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String productInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String Delete(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = productService.productInfo(map);
+		resultMap = bbsService.bbsDelete(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/bbs/view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String bbsInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = bbsService.bbsInfo(map);
 		
 		
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value = "/product/payment.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/bbs/update.dox", method = RequestMethod.POST, produces ="application/json;charset=UTF-8")
 	@ResponseBody
-	public String paymentHistoryAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = productService.paymentHistoryAdd(map);
-		
-		
+	public String update(@RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<>();
+
+			   
+		bbsService.bbsUpdate(map);
+
+		resultMap.put("result", "success");
 		return new Gson().toJson(resultMap);
 	}
+
 	
 }

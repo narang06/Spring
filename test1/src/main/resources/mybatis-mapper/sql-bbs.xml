@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.BbsMapper">
+	<select id="getBbsList" parameterType="hashmap" resultType="com.example.test1.model.Bbs">
+		SELECT *
+		FROM TBL_BBS
+		WHERE 1=1
+		
+		<if test="search == 1">
+          AND (
+			TITLE LIKE '%' || #{keyword} || '%'
+          	OR USERID LIKE '%' || #{keyword} || '%'
+          )
+     	</if>
+     	
+     	<if test="search == 2">
+     		AND TITLE LIKE '%' || #{keyword} || '%'
+     	</if>
+     	
+     	<if test="search == 3">
+     		AND USERID LIKE '%' || #{keyword} || '%'
+     	</if>	
+     	ORDER BY BBS_NUM DESC
+     	OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+     	</select>
+     	
+     <select id="bbsListCnt" parameterType="hashmap" resultType="INT">
+		SELECT
+		   COUNT(*)
+		FROM TBL_BBS
+		WHERE 1=1
+		
+		<if test="search == 1">
+          AND (
+			TITLE LIKE '%' || #{keyword} || '%'
+          	OR USERID LIKE '%' || #{keyword} || '%'
+          )
+     	</if>
+     	
+     	<if test="search == 2">
+     		AND TITLE LIKE '%' || #{keyword} || '%'
+     	</if>
+     	
+     	<if test="search == 3">
+     		AND USERID LIKE '%' || #{keyword} || '%'
+     	</if>
+		
+	</select>
+	
+	<insert id="bbsAdd" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BBS_NUM" keyProperty="bbsNum">
+		INSERT INTO TBL_BBS 
+		VALUES (BBS_SEQ.NEXTVAL, #{title}, #{content}, 0, #{userId}, SYSDATE, SYSDATE)
+	</insert>
+	
+	<insert id="insertBbsImg" parameterType="hashmap">
+		INSERT INTO TBL_BBS_FILE
+		VALUES(BBSFILE_SEQ.NEXTVAL, #{bbsNum}, #{path}, #{fileName}, #{orgName}, #{size}, #{ext})
+	</insert>
+	
+	<delete id="bbsDelete" parameterType="hashmap">
+		DELETE 
+		FROM TBL_BBS
+		WHERE BBS_NUM = #{bbsNum}
+	</delete>
+	
+	<select id="bbsInfo" parameterType="hashmap" resultType="com.example.test1.model.Bbs">
+		SELECT * 
+		FROM TBL_BBS 
+		WHERE BBS_NUM = #{bbsNum}
+	</select>
+	
+	<select id="bbsImgInfo" parameterType="hashmap" resultType="com.example.test1.model.Tbl">
+		SELECT *
+		FROM TBL_BBS_FILE
+		WHERE BOARDNO = #{bbsNum}
+	</select>
+
+	<update id="bbsUpdate" parameterType="hashmap">
+		UPDATE TBL_BBS
+		SET CONTENTS = #{contents}
+		WHERE BBS_NUM = #{bbsNum}
+	</update>
+	
+</mapper>
+
+
+
+

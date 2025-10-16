@@ -7,8 +7,9 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/js/page-change.js"></script>
     <style>
-        table, tr, td, th{
+        #board table,  tr,  td,  th{
             border : 1px solid black;
             border-collapse: collapse;
             padding : 5px 10px;
@@ -24,13 +25,32 @@
 </head>
 <body>
     <div id="app">
-        메인페이지
-        </br>
-        {{sessionName}}님 환영 합니다.
         <div>
-            <a href="/board-list.do"><button>게시판으로 이동</button></a>
-            <a href="/product.do"><button>제품목록으로 이동</button></a>
-            <button @click="fnLogout">로그아웃</button>
+            <p>-- 본문 --</p>
+            <table id="board">
+                <tr>
+                    <th>제목</th>
+                    <td>{{info.title}}</td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td>{{info.userId}}</td>
+                </tr>
+                <tr>
+                    <th>조회수</th>
+                    <td>{{info.hit}}</td>
+                </tr>  
+                <tr>
+                    <th>내용</th>
+                    <td>
+                        <img v-for="item in fileList" :src="item.filePath">
+                        <br>
+                        <div v-html="info.contents"></div>
+                    </td>
+                </tr>  
+            </table>
+            <button @click="fnBack()">뒤로가기</button>
+            <button @click="fnUpdate(bbsNum)">수정</button>  
         </div>
     </div>
 </body>
@@ -41,31 +61,42 @@
         data() {
             return {
                 // 변수 - (key : value)
+                bbsNum : "${bbsNum}",
+                info : {},     
                 sessionId : "${sessionId}",
-                sessionName : "${sessionName}",
-                sessionStatus : "${sessionStatus}"
+                fileList : []
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnLogout: function () {
+            fnInfo: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    bbsNum : self.bbsNum
+                };
                 $.ajax({
-                    url: "/member/logout.dox",
+                    url: "/bbs/view.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert(data.msg);
-                        location.href="/member/login.do";
+                        console.log(data);
+                        self.info = data.info;
+                        self.fileList = data.fileList;
                     }
                 });
+            },
+            fnBack(){
+                history.back();
+            },
+            fnUpdate(bbsNum){
+                pageChange("/bbs/add.do", {bbsNum : bbsNum});
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            self.fnInfo();
         }
     });
 

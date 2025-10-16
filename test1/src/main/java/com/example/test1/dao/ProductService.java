@@ -101,5 +101,21 @@ public class ProductService {
 		
 		return resultMap;
 		
-	}	
+	}
+	
+		public HashMap<String, Object> paymentHistoryAdd(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			productMapper.insertPaymentHistory(map);
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			resultMap.put("result", "fail");
+			System.out.print(e.getMessage());
+		}
+		
+		return resultMap;
+		
+	}
+	
 }
