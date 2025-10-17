@@ -50,6 +50,7 @@
             </tr>     
         </table>
         <button @click="fnAdd()">작성</button>
+        <button @click="fnBack">뒤로가기</button>
     </div>
 </body>
 </html>
@@ -60,7 +61,8 @@
             return {
                 // 변수 - (key : value)
                 bbsNum: '${info.bbsNum}',
-                title: '${info.title}'
+                title: '${info.title}',
+                sessionId : "${sessionId}"
                 
                 
             };
@@ -85,7 +87,7 @@
                         form.append( "file1",  $("#file1")[0].files[0] );
                         form.append( "bbsNum",  data.bbsNum);  
                         self.upload(form);
-                        // location.href="/bbs/list.do"
+                        location.href="/bbs/list.do"
                         alert("추가되었습니다.");
                     }
                 });
@@ -102,6 +104,9 @@
                         console.log(data)
                     }	           
                 });
+            },
+            fnBack(){
+                history.back();
             }
         }, // methods
         mounted() {

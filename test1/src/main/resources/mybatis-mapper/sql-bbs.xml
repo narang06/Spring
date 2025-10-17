@@ -79,7 +79,8 @@
 
 	<update id="bbsUpdate" parameterType="hashmap">
 		UPDATE TBL_BBS
-		SET CONTENTS = #{contents}
+		SET CONTENTS = #{contents},
+			TITLE = #{title}
 		WHERE BBS_NUM = #{bbsNum}
 	</update>
 	

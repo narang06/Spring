@@ -17,7 +17,7 @@ public class BbsService {
 	@Autowired
 	BbsMapper bbsMapper;
 	
-	
+	// 게시글 리스트
 	public HashMap<String, Object> bbsList(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
@@ -30,7 +30,7 @@ public class BbsService {
 		
 		return resultMap;
 	}
-	
+	// 게시글 추가
 	public HashMap<String, Object> bbsAdd(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		int bbs = bbsMapper.bbsAdd(map);
@@ -39,20 +39,21 @@ public class BbsService {
 		resultMap.put("result","success");
 		return resultMap;
 	}
-	
+	// 이미지 추가
 	public void addBbsImg(HashMap<String, Object> map) {
 		int cnt = bbsMapper.insertBbsImg(map);
 		
 	}
-	
+	// 게시글 삭제
 	public HashMap<String, Object> bbsDelete(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		int cnt = bbsMapper.bbsDelete(map);
+		
+		bbsMapper.bbsDelete(map);
 		
 		resultMap.put("result","success");
 		return resultMap;
 	}
-	
+	// 게시글 상세보기
 	public HashMap<String, Object> bbsInfo(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 	
@@ -64,8 +65,11 @@ public class BbsService {
 		resultMap.put("result","success");
 		return resultMap;
 	}
-
-	public void bbsUpdate(HashMap<String, Object> map) {
-	    bbsMapper.bbsUpdate(map);
+	// 게시글 수정
+	public HashMap<String, Object> bbsUpdate(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		bbsMapper.bbsUpdate(map);
+		return resultMap;
 	}
 }

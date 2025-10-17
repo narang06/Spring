@@ -49,8 +49,8 @@
                     </td>
                 </tr>  
             </table>
-            <button @click="fnBack()">뒤로가기</button>
-            <button @click="fnUpdate(bbsNum)">수정</button>  
+            <button @click="fnBack">뒤로가기</button>
+            <button @click="fnUpdate">수정</button>  
         </div>
     </div>
 </body>
@@ -89,8 +89,9 @@
             fnBack(){
                 history.back();
             },
-            fnUpdate(bbsNum){
-                pageChange("/bbs/add.do", {bbsNum : bbsNum});
+            fnUpdate(){
+                let self = this;
+                pageChange("/bbs/update.do", {bbsNum : self.bbsNum});
             }
         }, // methods
         mounted() {

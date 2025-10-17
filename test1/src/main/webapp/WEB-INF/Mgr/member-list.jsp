@@ -21,6 +21,9 @@
         tr:nth-child(even){
             background-color: azure;
         }
+        #index {
+            margin: 2px;
+        }
     </style>
 </head>
 <body>
@@ -28,6 +31,13 @@
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
          <table>
             <h2>회원 목록</h2>
+            <div>
+                <select v-model="pageSize" @change="fnList">
+                    <option value="3">3 개씩</option>
+                    <option value="5">5 개씩</option>
+                    <option value="10">10 개씩</option>
+                </select>
+            </div>
             <tr>
                 <th>유저 아이디</th>
                 <th>이름</th>
@@ -49,6 +59,11 @@
                 <td><button v-if="item.cnt >= 5" @click="fnReset(item.userId)">해제</button></td> 
             </tr>
          </table>
+         <div>
+            <a href="javascript:;" v-for="num in index" id="index" @click="fnpageChange(num)">
+                <span :class="{active : page == num}">{{num}}</span>
+            </a>
+        </div>
     </div>
 </body>
 </html>
@@ -57,14 +72,22 @@
     const app = Vue.createApp({
         data() {
             return {
-                list : {}
+                list : [],
+
+                // 페이징 변수
+                pageSize : 5,
+                page: 1,
+                index : 0
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
             fnList: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    page : (self.page-1) * self.pageSize,
+                    pageSize : self.pageSize
+                };
                 $.ajax({
                     url: "/mgr/member/list.dox",
                     dataType: "json",
@@ -73,6 +96,7 @@
                     success: function (data) {
                         console.log(data);
                         self.list = data.list;
+                        self.index = Math.ceil(data.cnt / self.pageSize);
                     }
                 });
             },
@@ -99,6 +123,11 @@
             },
             fnView (userId){
                 pageChange("/mgr/member/view.do",{userId : userId});
+            },
+            fnpageChange : function(num){
+                let self = this;
+                self.page = num;
+                self.fnList();
             }
         }, // methods
         mounted() {

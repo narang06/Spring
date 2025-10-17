@@ -25,6 +25,9 @@ public interface MemberMapper {
 	// 관리자 로그인
 	List<Member> adminLogin(HashMap<String, Object> map);
 	
+	// 맴버 리스트 전체 개수
+	int memberListCnt(HashMap<String, Object> map);
+	
 	// 로그인 오류 횟수 증가
 	int updateLoginCnt(HashMap<String, Object> map);
 	

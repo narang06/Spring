@@ -26,5 +26,5 @@ public interface BbsMapper {
 	// 첨부파일 보기
 	List<Bbs> bbsImgInfo(HashMap<String, Object> map);
 	// 게시글 수정
-	void bbsUpdate(HashMap<String, Object> map);
+	int bbsUpdate(HashMap<String, Object> map);
 }

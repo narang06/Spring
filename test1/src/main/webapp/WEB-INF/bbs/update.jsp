@@ -34,22 +34,19 @@
         <table>
             <tr>
                 <th>제목</th>
-                <td><input type="text" v-model="title"></td>
+                <td><input v-model="title" placeholder="제목"></td>
             </tr>
             <tr>
                 <th>작성자</th>
                 <td>{{sessionId}}</td>
             </tr>
             <tr>
-                <th>파일첨부</th>
-                <td><input type="file" id="file1" name="file1" accept=".jpg, .png"></td>
-            </tr> 
-            <tr>
                 <th>내용</th>
-                <td><textarea v-model="content" cols="40" rows="20"></textarea></td>
+                <td><textarea v-model="contents" cols="25" rows="5"></textarea></td>
             </tr>     
         </table>
-        <button @click="fnAdd()">작성</button>
+        <button @click="fnEdit">완료</button>
+        <button @click="fnBack">뒤로가기</button>
     </div>
 </body>
 </html>
@@ -59,57 +56,65 @@
         data() {
             return {
                 // 변수 - (key : value)
+                sessionId : "${sessionId}",
                 title : "",
-                userId : "",
-                content : "",
-                info : {},
-                sessionId : "${sessionId}"
-                
-                
+                contents : "",
+                bbsNum : "${bbsNum}"   
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnAdd: function () {
+            fnInfo: function () {
                 let self = this;
                 let param = {
-                    title : self.title,
-                    userId : self.sessionId,
-                    content : self.content
+                    bbsNum : self.bbsNum
                 };
                 $.ajax({
-                    url: "/bbs/add.dox",
+                    url: "/bbs/view.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
-                    success: function (data) {         
-                        console.log(data.boardNo);
-                        var form = new FormData();
-                        form.append( "file1",  $("#file1")[0].files[0] );
-                        form.append( "bbsNum",  data.bbsNum);  
-                        self.upload(form);
-                        // location.href="/bbs/list.do"
-                        alert("추가되었습니다.");
+                    success: function (data) {
+                        console.log(data);
+                        if(data.result == "success"){
+                            self.title = data.info.title;
+                            self.contents = data.info.contents;
+                        } else {
+                            alert("오류가 발생했습니다!");
+                        }
                     }
                 });
             },
-            upload : function(form){
-                var self = this;
+            fnEdit : function () {
+                let self = this;
+                let param = {
+                    bbsNum : self.bbsNum,
+                    title : self.title,
+                    contents : self.contents
+                };
                 $.ajax({
-                    url : "/bbs/fileUpload.dox",
-                    type : "POST",
-                    processData : false,
-                    contentType : false,
-                    data : form,
-                    success:function(data) { 
-                        console.log(data)
-                    }	           
+                    url: "/bbs/update.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        if(data.result == "success"){
+                            alert("수정되었습니다!");
+                            location.href = "/bbs/list.do";
+                        } else {
+                            alert("오류가 발생했습니다!");
+                        }
+                    }
                 });
+            },
+            fnBack(){
+                history.back();
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            self.fnInfo();
             
         }
     });

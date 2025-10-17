@@ -31,34 +31,28 @@ public class BbsController {
 	@RequestMapping("/bbs/list.do") 
     public String list(Model model) throws Exception{
 
-        return "bbs/list";
+        return "/bbs/list";
     }
 	
 	@RequestMapping("/bbs/add.do") 
-    public String add(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		request.setAttribute("bbsNum",map.get("bbsNum"));
-        return "bbs/add";
+	public String insert(Model model) throws Exception{
+		
+		return "/bbs/add";
     }
 	
 	@RequestMapping("/bbs/view.do") 
     public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		
 		request.setAttribute("bbsNum",map.get("bbsNum"));
-        return "bbs/view";
+		return "/bbs/view";
     }
 	
 	@RequestMapping("/bbs/update.do")
-	public String updatePage(Model model, @RequestParam("bbsNum") int bbsNum) throws Exception {
+	public String updatePage(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 
-	    // 서비스의 bbsInfo 메소드를 재활용하여 기존 게시물 정보를 가져옵니다.
-	    HashMap<String, Object> paramMap = new HashMap<>();
-	    paramMap.put("bbsNum", bbsNum);
-	    HashMap<String, Object> resultMap = bbsService.bbsInfo(paramMap);
-
-	    // 조회된 정보를 "info"라는 이름으로 모델에 담습니다.
-	    model.addAttribute("info", resultMap.get("info"));
-
+		request.setAttribute("bbsNum",map.get("bbsNum"));
 	    // /WEB-INF/views/bbs/update.jsp 파일을 화면에 보여줍니다.
-	    return "bbs/update";
+	    return "/bbs/update";
 	}
 	
 	@RequestMapping(value = "/bbs/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

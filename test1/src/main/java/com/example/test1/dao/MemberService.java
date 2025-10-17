@@ -157,7 +157,11 @@ public class MemberService {
 	public HashMap<String, Object> adminLogin(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			
 			List<Member> list = memberMapper.adminLogin(map);
+			int cnt = memberMapper.memberListCnt(map);
+			
+			resultMap.put("cnt", cnt);
 			resultMap.put("list", list);
 			resultMap.put("result", "success");
 		} catch (Exception e) {

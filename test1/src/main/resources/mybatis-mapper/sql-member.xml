@@ -36,6 +36,7 @@
 		        SUBSTR(BIRTH,3,2) ||  '.'  || SUBSTR(BIRTH,5,2) || '.' || SUBSTR(BIRTH,7,2)
 		        ) CBIRTH
 		FROM TBL_USER U
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
 	<update id="updateLoginCnt" parameterType="hashmap">
@@ -61,6 +62,12 @@
 		SET PASSWORD = #{hashPwd}
 		WHERE USERID = #{userId}
 	</update>
+	
+	<select id="memberListCnt" parameterType="hashmap" resultType="INT">
+		SELECT
+		   COUNT(*)
+		FROM TBL_USER
+	</select>
 </mapper>
 
 

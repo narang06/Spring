@@ -21,6 +21,10 @@
         tr:nth-child(even){
             background-color: azure;
         }
+        #index{
+            text-decoration: none;
+            margin: 2px;
+        }
     </style>
 </head>
 <body>
@@ -53,20 +57,24 @@
                 <tr v-for="item in list">
                     <td><input type="radio" :value="item.bbsNum" v-model="selectItem"></td>
                     <td>{{item.bbsNum}}</td>
-                    <td><a href="javascript:;" @click="fnView(item.bbsNum)">{{item.title}}</a></td>
+                    <td>
+                        <a href="javascript:;" @click="fnView(item.bbsNum)" v-if="item.hit >= 25" style="color: red;">{{item.title}}</a>
+                        <a href="javascript:;" @click="fnView(item.bbsNum)" v-else>{{item.title}}</a>
+                    </td>
                     <td>{{item.userId}}</td>
-                    <td v-if="item.hit >= 25" style="color: red;">{{item.hit}}</td>
-                    <td v-else style="color: black;">{{item.hit}}</td>
+                    <td >{{item.hit}}</td>     
                     <td>{{item.udatetime}}</td>         
                 </tr>
             </table>      
             <button @click="fnRemove(selectItem)">선택 삭제</button>
             <a href="/bbs/add.do"><button>글쓰기</button></a>
-            <a href="javascript:;" v-for="num in index" id="index" @click="fnpageChange(num)">
-                <span :class="{active : page == num}">
-                    {{num}}
-                </span>
-            </a>
+            <div>
+                <a href="javascript:;" v-for="num in index" id="index" @click="fnpageChange(num)">
+                    <span :class="{active : page == num}">
+                        {{num}}
+                    </span>
+                </a>
+            </div>
         </div>
         
     </div>
@@ -81,11 +89,13 @@
                 list : {},
                 search: 1,
                 keyword : "",
+               
                 pageSize : 10,
                 page : 1,
                 index : 0,
+
                 sessionId : "${sessionId}",
-                selectItem : null
+                selectItem : ""
             };
         },
         methods: {
@@ -127,6 +137,8 @@
                     data: param,
                     success: function (data) {
                         alert("삭제 완료");
+                        self.selectItem = "";
+                        self.page = 1; 
                         self.fnList();
                     }
                 });
