@@ -26,6 +26,12 @@ public class MainController {
         return "/Main/home";
     }
 	
+	@RequestMapping("/chat.do") 
+    public String gemini(Model model) throws Exception{
+
+        return "/chat";
+    }
+	
 	@RequestMapping(value = "/member/check.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String idCheck(Model model, @RequestParam HashMap<String, Object> map) throws Exception {

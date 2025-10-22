@@ -40,6 +40,9 @@
                     <button>비밀번호 찿기</button>
                 </a>
             </div>
+             <a :href="location">
+                <img src="/img/kakao_login.png" alt="카카오 로그인">
+            </a>
         </div>
     </div>
 </body>
@@ -50,7 +53,8 @@
         data() {
             return {
                 id : "",
-                pwd : ""
+                pwd : "",
+                location : "${location}"
             };
         },
         methods: {
@@ -80,6 +84,7 @@
         }, // methods
         mounted() {
             let self = this;
+
         }
     });
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>카카오 로그인</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
@@ -24,14 +24,10 @@
 </head>
 <body>
     <div id="app">
-        메인페이지
-        </br>
-        {{sessionName}}님 환영 합니다.
-        <div>
-            <a href="/board-list.do"><button>게시판으로 이동</button></a>
-            <a href="/product.do"><button>제품목록으로 이동</button></a>
-            <button @click="fnLogout">로그아웃</button>
-        </div>
+        <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+        <a :href="location">
+            <img src="/img/kakao_login.png" alt="카카오 로그인">
+        </a>
     </div>
 </body>
 </html>
@@ -41,41 +37,21 @@
         data() {
             return {
                 // 변수 - (key : value)
-                sessionId : "${sessionId}",
-                sessionName : "${sessionName}",
-                sessionStatus : "${sessionStatus}",
-                code : ""
-
+                location : "${location}"
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnLogout: function () {
+            fnList: function () {
                 let self = this;
                 let param = {};
                 $.ajax({
-                    url: "/member/logout.dox",
+                    url: "",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert(data.msg);
-                        location.href="/member/login.do";
-                    }
-                });
-            },
-            fnKakao : function(){
-                let self = this;
-                let param = {
-                    code : self.code
-                };
-                $.ajax({
-                    url: "/kakao.dox",
-                    dataType: "json",
-                    type: "POST",
-                    data: param,
-                    success: function (data) {
-                        console.log(data);
+
                     }
                 });
             }
@@ -83,11 +59,6 @@
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            const queryParams = new URLSearchParams(window.location.search);
-            self.code = queryParams.get('code') || ''; 
-            if(self.code != ""){
-                self.fnKakao();
-            }
         }
     });
 
